@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="color-scheme" content="light dark">
+<title>Клип против смысла</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Onest:wght@400;500;600;700&display=swap">
+<style>
+/* Concept: the site is a story reel. The top bar is a segmented "stories" progress bar, every page is one story with its own color band. One memorable object: the 0:08 phone on the home page with the myth struck through. Flat saturated color, hard offset shadows, heavy Dela Gothic headlines, calm Onest body. */
+:root{
+  --bg:#F4F2FF;
+  --paper:#FFFFFF;
+  --ink:#14112E;
+  --ink-2:#4F4B6B;
+  --line:#CFCBEA;
+  --blue:#4B3BFF;
+  --on-blue:#FFFFFF;
+  --pink:#FF4F8B;
+  --yellow:#FFD93D;
+  --mint:#34D9A4;
+  --gray:#B9B5D6;
+  --on-warm:#14112E;
+  --link:#3A2BE0;
+  --display:'Dela Gothic One','Onest',system-ui,sans-serif;
+  --body:'Onest',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E0C22;--paper:#181536;--ink:#F3F1FF;--ink-2:#A9A5CC;--line:#332F63;
+  --blue:#8A7DFF;--on-blue:#0E0C22;--pink:#FF6B9D;--yellow:#FFD93D;--mint:#3DE0AB;--gray:#9C98C4;--link:#B3A9FF;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E0C22;--paper:#181536;--ink:#F3F1FF;--ink-2:#A9A5CC;--line:#332F63;
+  --blue:#8A7DFF;--on-blue:#0E0C22;--pink:#FF6B9D;--yellow:#FFD93D;--mint:#3DE0AB;--gray:#9C98C4;--link:#B3A9FF;color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65}
+a{color:var(--link);text-underline-offset:3px}
+a:focus-visible{outline:3px solid var(--pink);outline-offset:3px;border-radius:4px}
+.wrap{max-width:980px;margin-inline:auto;padding-inline:16px}
+
+/* ---------- story bar ---------- */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:2px solid var(--ink)}
+.top .wrap{padding-block:10px 8px}
+.brandrow{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.brandrow a{white-space:nowrap;display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-family:var(--display);font-size:16px}
+.brandrow svg{width:30px;height:30px;flex:none}
+#cur{margin-left:auto;white-space:nowrap;font-size:13px;font-weight:600;color:var(--ink-2);text-align:right}
+nav ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+nav a{display:block;padding:7px 0 2px;text-decoration:none;color:var(--ink-2);font-size:12px;font-weight:600;line-height:1.2;min-width:0}
+nav a .seg{display:block;height:6px;border-radius:99px;background:var(--line);position:relative;overflow:hidden;margin-bottom:5px}
+nav a .seg::after{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left}
+nav li.done .seg::after{transform:scaleX(1)}
+nav li.cur .seg::after{background:var(--pink);transform:scaleX(1)}
+nav li.cur.run .seg::after{animation:fill .7s cubic-bezier(.3,.7,.2,1)}
+nav li.cur a{color:var(--ink)}
+nav .lbl{display:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (min-width:860px){nav .lbl{display:block}#cur{display:none}}
+@media (prefers-reduced-motion:reduce){nav li.cur.run .seg::after{animation:none}}
+
+/* ---------- type ---------- */
+h1,h2,h3,h4{font-family:var(--display);font-weight:400;line-height:1.12;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,6.6vw,58px);letter-spacing:-.01em}
+h2{font-size:clamp(26px,5.2vw,46px);letter-spacing:-.01em}
+h3{font-size:clamp(19px,2.8vw,24px);margin:40px 0 12px}
+h4{font-size:16px;line-height:1.3}
+p{margin:0 0 16px}
+.lede{font-size:clamp(18px,2.4vw,21px);line-height:1.5}
+.note{font-size:14px;color:var(--ink-2)}
+.cite{font-size:12px;font-weight:700;text-decoration:none;vertical-align:super;line-height:0;padding:0 1px}
+
+/* ---------- bands ---------- */
+.band{border-bottom:2px solid var(--ink);padding-block:44px 40px}
+.band .part{font-weight:600;margin:0 0 14px;font-size:15px}
+.band h2{max-width:20ch;margin-bottom:16px}
+.band .sub{margin:0;font-size:18px;max-width:52ch}
+.b-pink{background:var(--pink);color:var(--on-warm)}
+.b-yellow{background:var(--yellow);color:var(--on-warm)}
+.b-mint{background:var(--mint);color:var(--on-warm)}
+.b-blue{background:var(--blue);color:var(--on-blue)}
+.b-blue a{color:inherit}
+
+.body{padding-block:36px 72px}
+.body>*{max-width:68ch}
+.body>figure,.body>.tablewrap,.body>.pager,.body>.tiles,.body>.links,.body>ol.src,.body>.authorbox{max-width:none}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:center}
+.hero h1{margin-bottom:22px}
+.hero .lede{margin-bottom:18px;max-width:46ch}
+@media (max-width:760px){.hero{grid-template-columns:1fr;gap:34px}.reel{width:220px}}
+
+
+/* reel: auto-advancing story phone */
+.reelwrap{justify-self:center;display:flex;flex-direction:column;align-items:center;gap:18px;min-width:0}
+.reel{position:relative;width:min(250px,100%);aspect-ratio:9/16;border:3px solid var(--ink);border-radius:34px;overflow:hidden;box-shadow:8px 8px 0 var(--ink);transform:rotate(3deg);background:#14112E;color:#fff;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.slide{position:absolute;inset:0;padding:42px 18px 20px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+.slide.on{opacity:1;visibility:visible}
+.slide .who{font-size:13px;font-weight:600;opacity:.8}
+.slide .big{font-family:var(--display);font-size:56px;line-height:1;margin:auto 0 12px;position:relative;align-self:flex-start}
+.slide .big.sm{font-size:44px}
+.slide .cap{font-size:16px;font-weight:600;line-height:1.3;margin-bottom:12px}
+.slide .pill{align-self:flex-start;font-weight:700;font-size:13px;padding:5px 12px;border-radius:99px;margin-bottom:8px;border:2px solid currentColor}
+.slide .more{position:relative;z-index:4;align-self:flex-start;font-size:13px;font-weight:600;color:inherit;text-decoration:underline}
+.s1{background:#14112E;color:#fff}
+.s1 .big::after{content:"";position:absolute;left:-6%;right:-6%;top:52%;height:7px;background:#FF4F8B;border-radius:9px;transform:rotate(-8deg)}
+.s1 .pill{background:#FF4F8B;color:#14112E;border-color:#FF4F8B}
+.s2{background:#FFD93D;color:#14112E}
+.s3{background:#34D9A4;color:#14112E}
+.s4{background:#FF4F8B;color:#14112E}
+.s5{background:#F4F2FF;color:#14112E}
+.s2 .pill,.s3 .pill,.s4 .pill,.s5 .pill{background:#14112E;color:#fff;border-color:#14112E}
+.bars{position:absolute;left:14px;right:14px;top:14px;z-index:3;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;pointer-events:none}
+.bars i{height:4px;border-radius:9px;background:rgba(127,127,127,.45);overflow:hidden;position:relative}
+.bars i b{position:absolute;inset:0;background:#fff;transform:scaleX(0);transform-origin:left;mix-blend-mode:normal}
+.reel[data-tone="light"] .bars i b{background:#14112E}
+.zones{position:absolute;inset:0;z-index:3;display:grid;grid-template-columns:30% 40% 30%}
+.zones button{background:transparent;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.zones button:focus-visible{outline:3px solid var(--pink);outline-offset:-6px}
+.pauseicon{position:absolute;top:26px;right:16px;z-index:4;width:30px;height:30px;border-radius:50%;background:rgba(20,17,46,.85);display:none;align-items:center;justify-content:center;gap:4px;pointer-events:none}
+.pauseicon i{width:4px;height:12px;border-radius:2px;background:#fff}
+.reel.paused .pauseicon{display:flex}
+.reelhint{font-size:13px;line-height:1.4;max-width:230px;text-align:center;margin:0}
+.b-blue a.reelhint{color:inherit}
+
+/* ---------- tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin:0 0 44px}
+.tile{border:2px solid var(--ink);border-radius:18px;padding:22px;box-shadow:5px 5px 0 var(--ink);color:var(--on-warm);min-width:0}
+.tile h3{margin:0 0 10px;font-size:clamp(20px,3vw,26px)}
+.tile p{margin:0;font-size:16px}
+.tile.paper{background:var(--paper);color:var(--ink)}
+.tile .cite{color:inherit}
+.t4{grid-column:span 4}.t2{grid-column:span 2}
+@media (max-width:760px){.t4,.t2{grid-column:span 6}}
+
+.links{display:flex;flex-direction:column;border-top:2px solid var(--ink);margin-bottom:40px}
+.links a{display:flex;justify-content:space-between;gap:16px;align-items:baseline;flex-wrap:wrap;padding:16px 4px;border-bottom:2px solid var(--ink);text-decoration:none;color:var(--ink);transition:padding .15s,background .15s}
+.links a:hover{background:var(--paper);padding-left:14px}
+.links b{font-family:var(--display);font-weight:400;font-size:clamp(18px,2.6vw,22px)}
+.links span{color:var(--ink-2);font-size:15px}
+
+/* ---------- content bits ---------- */
+.term{background:var(--yellow);color:var(--on-warm);border:2px solid var(--ink);border-radius:12px;padding:14px 18px;margin:0 0 20px;font-size:16px;line-height:1.55}
+.term b{font-weight:700}
+figure{margin:32px 0;background:var(--paper);border:2px solid var(--ink);border-radius:18px;box-shadow:6px 6px 0 var(--ink);padding:24px}
+figure h4{margin-bottom:18px}
+figcaption{font-size:13px;color:var(--ink-2);margin-top:16px;padding-top:12px;border-top:2px solid var(--line)}
+.row{display:grid;grid-template-columns:minmax(110px,200px) minmax(0,1fr);gap:6px 14px;align-items:center;margin-bottom:10px}
+.row .lab{font-size:14px;line-height:1.3;font-weight:500}
+.track{height:32px;border-radius:8px;background:var(--bg);border:2px solid var(--ink);overflow:hidden}
+.fill{height:100%;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:13px;font-weight:700;min-width:max-content;white-space:nowrap;border-right:2px solid var(--ink)}
+.f-pink{background:var(--pink);color:var(--on-warm)}
+.f-blue{background:var(--blue);color:var(--on-blue)}
+.f-yellow{background:var(--yellow);color:var(--on-warm)}
+.f-gray{background:var(--gray);color:var(--on-warm)}
+.group{margin-bottom:20px}
+.group .gt{font-weight:700;margin-bottom:8px;font-size:15px}
+.group .row{grid-template-columns:90px minmax(0,1fr);margin-bottom:6px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:500;margin-bottom:16px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;border:2px solid var(--ink);margin-right:7px;vertical-align:-2px}
+
+.chain{display:flex;flex-wrap:wrap;gap:12px}
+.chain .step{flex:1 1 180px;min-width:0;background:var(--bg);border:2px solid var(--ink);border-radius:12px;padding:14px;font-size:15px;line-height:1.45}
+.chain .step b{display:block;font-weight:700;font-size:14px;margin-bottom:4px}
+.chain .step.end{background:var(--pink);color:var(--on-warm)}
+
+.tablewrap{overflow-x:auto;margin:24px 0;border:2px solid var(--ink);border-radius:14px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:580px;font-size:15px}
+th{background:var(--ink);color:var(--bg);text-align:left;font-weight:600;padding:11px 14px}
+td{padding:12px 14px;border-top:2px solid var(--line);vertical-align:top}
+td.k{font-weight:700}
+.badge{display:inline-block;font-weight:700;font-size:13px;padding:3px 10px;border-radius:99px;border:2px solid var(--ink);color:var(--on-warm);white-space:nowrap}
+.badge.y{background:var(--mint)}.badge.m{background:var(--yellow)}.badge.n{background:var(--pink)}
+
+ol.src{list-style:none;padding:0;margin:0;counter-reset:s;display:grid;gap:12px}
+ol.src li{counter-increment:s;background:var(--paper);border:2px solid var(--ink);border-radius:14px;padding:16px 18px 16px 70px;position:relative;font-size:15px;line-height:1.55;overflow-wrap:anywhere}
+ol.src li::before{content:counter(s);position:absolute;left:16px;top:14px;width:38px;height:38px;border-radius:50%;background:var(--yellow);color:var(--on-warm);border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-size:17px}
+.tag{display:inline-block;font-weight:700;font-size:12px;padding:2px 9px;border-radius:99px;background:var(--mint);color:var(--on-warm);border:2px solid var(--ink);margin-left:4px}
+
+.authorbox{display:grid;grid-template-columns:auto minmax(0,1fr);gap:36px;align-items:start}
+.authorbox .mark{width:170px;height:170px;border:3px solid var(--ink);border-radius:36px;box-shadow:8px 8px 0 var(--ink);transform:rotate(-4deg);background:var(--blue)}
+.authorbox dl{margin:0;display:grid;gap:20px;max-width:62ch}
+.authorbox dt{font-family:var(--display);font-size:18px;margin-bottom:4px}
+.authorbox dd{margin:0}
+@media (max-width:640px){.authorbox{grid-template-columns:1fr}.authorbox .mark{width:130px;height:130px}}
+
+.pager{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:48px}
+.pager a{background:var(--paper);color:var(--ink);border:2px solid var(--ink);border-radius:99px;padding:11px 20px;font-weight:600;text-decoration:none;box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+.pager a:hover{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.pager a.next{background:var(--yellow);color:var(--on-warm)}
+.pager:has(a:only-child){justify-content:flex-end}
+
+footer{border-top:2px solid var(--ink);padding-block:22px 40px;font-size:14px;color:var(--ink-2)}
+</style>
+</head><body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 120 120">
+    <rect width="120" height="120" fill="#4B3BFF"/>
+    <text x="58" y="74" text-anchor="middle" font-family="Dela Gothic One, Onest, Arial, sans-serif" font-size="46" fill="#FFFFFF">ИБ</text>
+    <circle cx="94" cy="92" r="18" fill="#FF4F8B"/>
+    <path d="M89 83 L103 92 L89 101 Z" fill="#14112E"/>
+  </symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brandrow">
+      <a href="#home"><svg role="img" aria-label="Авторский знак" style="border-radius:8px"><use href="#mark"/></svg>Клип против смысла</a>
+      <span id="cur" aria-live="polite"></span>
+    </div>
+    <nav aria-label="Разделы сайта">
+      <ol id="stories">
+        <li><a href="#home"><span class="seg"></span><span class="lbl">Главная</span></a></li>
+        <li><a href="#reading"><span class="seg"></span><span class="lbl">Чтение</span></a></li>
+        <li><a href="#clip"><span class="seg"></span><span class="lbl">Мышление</span></a></li>
+        <li><a href="#meta"><span class="seg"></span><span class="lbl">Мета-анализ</span></a></li>
+        <li><a href="#myth"><span class="seg"></span><span class="lbl">8 секунд</span></a></li>
+        <li><a href="#verdict"><span class="seg"></span><span class="lbl">Вывод</span></a></li>
+        <li><a href="#sources"><span class="seg"></span><span class="lbl">Источники</span></a></li>
+        <li><a href="#author"><span class="seg"></span><span class="lbl">Автор</span></a></li>
+      </ol>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ ГЛАВНАЯ ============ -->
+<section class="page" id="p-home">
+  <div class="band b-blue" style="padding-block:52px 56px">
+    <div class="wrap hero">
+      <div>
+        <h1>Короткие видео портят внимание? Что об этом известно на самом деле</h1>
+        <p class="lede">Сайт для школьников 8–10 классов и их родителей. Он отвечает на один вопрос: правда ли, что короткие видео (VK Клипы, Reels, TikTok) мешают сосредоточиться и учиться, и что здесь доказано, а что только кажется.</p>
+        <p style="font-size:15px;margin:0">Сайт создан как учебная работа по курсу «Технологии цифрового образования». Автор не психолог: он пересказывает найденные исследования и отмечает их ограничения.</p>
+      </div>
+      <div class="reelwrap">
+        <div class="reel" id="reel" role="group" aria-roledescription="карусель" aria-label="Главное из исследований, 5 кадров">
+          <div class="bars" id="bars"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+          <div class="slide s1 on" data-tone="dark"><span class="who">Что говорят в интернете</span><span class="big">0:08</span><span class="cap">«Внимание человека длится 8 секунд»</span><span class="pill">Источника нет</span><a class="more" href="#myth">Откуда цифра</a></div>
+          <div class="slide s2" data-tone="light"><span class="who">Мета-анализ, 2025</span><span class="big">71</span><span class="cap">исследование, 98 299 участников: кто больше смотрит короткие видео, у того в среднем хуже внимание</span><span class="pill">Связь есть</span><a class="more" href="#meta">Подробнее</a></div>
+          <div class="slide s3" data-tone="light"><span class="who">Важная оговорка</span><span class="big">≠</span><span class="cap">Связь не равна причине: большинство работ сравнивают людей один раз</span><span class="pill">Причина не доказана</span><a class="more" href="#meta">Почему</a></div>
+          <div class="slide s4" data-tone="light"><span class="who">Клиповое мышление</span><span class="big sm">61,8%</span><span class="cap">школьников с выраженным клиповым мышлением против 44,7% у студентов</span><span class="pill">Одно исследование</span><a class="more" href="#clip">Как измеряли</a></div>
+          <div class="slide s5" data-tone="light"><span class="who">Чтение школьников</span><span class="big">×2</span><span class="cap">скорость чтения выросла вдвое, ошибок в понимании стало больше в 1,5–1,7 раза</span><span class="pill">Выборка небольшая</span><a class="more" href="#reading">Что проверяли</a></div>
+          <div class="pauseicon" aria-hidden="true"><i></i><i></i></div>
+          <div class="zones"><button type="button" data-z="prev" aria-label="Предыдущий кадр"></button><button type="button" data-z="pause" aria-label="Пауза или продолжить"></button><button type="button" data-z="next" aria-label="Следующий кадр"></button></div>
+        </div>
+        <p class="reelhint">Края экрана листают, центр ставит на паузу. Зажми, чтобы подержать кадр.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap body">
+    <h3 style="margin-top:0;margin-bottom:20px">Короткий ответ</h3>
+    <div class="tiles">
+      <div class="tile t4" style="background:var(--pink)"><h3>Связь есть</h3><p>Чем больше человек смотрит коротких видео, тем в среднем хуже у него внимание и самоконтроль. Это следует из обзора 71 исследования <a class="cite" href="#sources">[3]</a>.</p></div>
+      <div class="tile t2" style="background:var(--yellow)"><h3>Причина не доказана</h3><p>Большинство работ только сравнивают людей в один момент времени <a class="cite" href="#sources">[3]</a>.</p></div>
+      <div class="tile t2" style="background:var(--mint)"><h3>«Клиповое мышление» — не диагноз</h3><p>Это название привычки думать обрывками, и её пытаются измерить <a class="cite" href="#sources">[4]</a>.</p></div>
+      <div class="tile t4 paper"><h3>«8 секунд» — миф</h3><p>Ни одно исследование не подтверждает цифру про внимание человека, а сравнение с золотой рыбкой не выдерживает проверки <a class="cite" href="#sources">[5]</a>.</p></div>
+    </div>
+
+    <h3 style="margin-top:0;margin-bottom:16px">Что внутри</h3>
+    <div class="links">
+      <a href="#reading"><b>Как школьники читают сейчас</b><span>Быстрее, но понимают хуже</span></a>
+      <a href="#clip"><b>Можно ли измерить «клиповое мышление»</b><span>Задача с карточками</span></a>
+      <a href="#meta"><b>Что нашли в 71 исследовании</b><span>Почти 100 тысяч участников</span></a>
+      <a href="#myth"><b>Откуда взялись 8 секунд</b><span>Как цифра без источника стала «фактом»</span></a>
+      <a href="#verdict"><b>Вывод автора</b><span>Что известно, что нет, и что делать учителю</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ЧТЕНИЕ ============ -->
+<section class="page" id="p-reading" hidden>
+  <div class="band b-pink"><div class="wrap">
+    <p class="part">Раздел 1 из 4</p>
+    <h2>Читают вдвое быстрее, а понимают хуже</h2>
+    <p class="sub">Изменилось ли чтение школьников? Что показал опрос в Нижнем Новгороде.</p>
+  </div></div>
+  <div class="wrap body">
+    <p>Исследователи из Приволжского исследовательского медицинского университета проверили 102 школьников 8–10 классов из трёх школ. Каждый две минуты читал с экрана басню в 133 слова, потом отвечал на четыре вопроса по тексту. Движения глаз записывали прибором. Результаты сравнили с данными 2014/2015 учебного года <a class="cite" href="#sources">[1]</a>.</p>
+    <p>Главный итог: скорость чтения выросла примерно в два раза, а ошибок в понимании стало больше в 1,5–1,7 раза, в зависимости от класса <a class="cite" href="#sources">[1]</a>.</p>
+
+    <figure>
+      <h4>Школьники сейчас в сравнении со школьниками 2014/2015 года</h4>
+      <div class="row"><div class="lab">Скорость чтения</div><div class="track"><div class="fill f-blue" style="width:100%">≈ 2×</div></div></div>
+      <div class="row"><div class="lab">Ошибки в понимании</div><div class="track"><div class="fill f-pink" style="width:80%">1,5–1,7×</div></div></div>
+      <div class="row"><div class="lab">Прежний уровень</div><div class="track"><div class="fill f-gray" style="width:50%">1×</div></div></div>
+      <figcaption>Схема автора по данным [1]. Шкала: 2× — вся полоса. Рисунок создан автором сайта, внешних изображений нет.</figcaption>
+    </figure>
+
+    <h3>Что ещё показал опрос</h3>
+    <p>Школьники сами сообщили, что проводят с устройствами около 14 часов в сутки (разброс ±2 часа), из них около 6 часов на телефоне. Информационные тексты в электронном виде читают 98% опрошенных, художественные книги — нет. Сложнее всего оказались задания, где надо отделить главное от второстепенного и сопоставить текст с картинкой: справились 47,2% восьмиклассников, 57,6% девятиклассников и 64,4% десятиклассников <a class="cite" href="#sources">[1]</a>.</p>
+
+    <h3>Почему к этим цифрам нужна осторожность</h3>
+    <div class="term"><b>Выборка</b> — люди, которых реально проверили. Чем она меньше и случайнее, тем осторожнее нужно делать общие выводы.</div>
+    <p>Исследование небольшое: 102 человека из одного города. Понимание проверяли по одной басне. Сравнивали с другой группой школьников из другого года, и из статьи не видно, были ли условия одинаковыми. Часы за экраном взяты из анкеты, а не измерены. Поэтому результат показывает тревожный сигнал, а не доказывает, что причина в коротких видео.</p>
+    <p>Есть и пример слабого места. В той же статье сказано, что электромагнитное излучение усиливает выработку дофамина и вызывает зависимость. Ссылки на исследование там нет, поэтому на сайте я это утверждение не использую <a class="cite" href="#sources">[1]</a>.</p>
+    <p><b>Итог раздела.</b> Данные из Нижнего Новгорода согласуются с идеей, что школьники читают поверхностнее. Но это один небольшой опрос, и в нём нет прямой проверки влияния коротких видео.</p>
+
+    <div class="pager"><a href="#home">Назад: Главная</a><a class="next" href="#clip">Дальше: Клиповое мышление</a></div>
+  </div>
+</section>
+
+<!-- ============ КЛИПОВОЕ МЫШЛЕНИЕ ============ -->
+<section class="page" id="p-clip" hidden>
+  <div class="band b-yellow"><div class="wrap">
+    <p class="part">Раздел 2 из 4</p>
+    <h2>Что значит «мыслить клипами» и как это проверили</h2>
+    <p class="sub">Можно ли «клиповое мышление» измерить? Эксперимент на школьниках и студентах.</p>
+  </div></div>
+  <div class="wrap body">
+    <div class="term"><b>Клиповое мышление</b> — так называют привычку воспринимать информацию короткими обрывками, слабо связывая их между собой и судя поверхностно. Ему противопоставляют целостное, или системное, мышление: оно ищет связи между фрагментами и общий смысл <a class="cite" href="#sources" style="color:inherit">[4]</a>.</div>
+    <p>Слово часто встречается в статьях и разговорах, а психологи им почти не занимались. Авторы работы из Ульяновского государственного педагогического университета отмечают, что это понятие редко определяют и проверяют <a class="cite" href="#sources">[4]</a>.</p>
+
+    <h3>Как устроена проверка</h3>
+    <p>Участникам дали журналистский текст Виктора Розова, разрезанный на 10 карточек в случайном порядке. Нужно было собрать текст в правильном порядке, придумать ему заглавие и объяснить, почему карточки лежат именно так. Времени не ограничивали. Работу оценивали по трём критериям: логика порядка, качество заглавия и качество объяснения <a class="cite" href="#sources">[4]</a>.</p>
+    <p>Проверили 89 школьников 15–17 лет и 76 студентов второго курса 20–21 года <a class="cite" href="#sources">[4]</a>.</p>
+
+    <figure>
+      <h4>Как участники распределились по типу мышления, % группы</h4>
+      <div class="legend"><span><i style="background:var(--pink)"></i>Школьники (89)</span><span><i style="background:var(--blue)"></i>Студенты (76)</span></div>
+      <div class="group"><div class="gt">Выраженное клиповое</div>
+        <div class="row"><div class="lab">Школьники</div><div class="track"><div class="fill f-pink" style="width:92%">61,8%</div></div></div>
+        <div class="row"><div class="lab">Студенты</div><div class="track"><div class="fill f-blue" style="width:67%">44,7%</div></div></div></div>
+      <div class="group"><div class="gt">Умеренное клиповое</div>
+        <div class="row"><div class="lab">Школьники</div><div class="track"><div class="fill f-pink" style="width:55%">37,1%</div></div></div>
+        <div class="row"><div class="lab">Студенты</div><div class="track"><div class="fill f-blue" style="width:55%">36,8%</div></div></div></div>
+      <div class="group"><div class="gt">Целостное</div>
+        <div class="row"><div class="lab">Школьники</div><div class="track"><div class="fill f-pink" style="width:1.6%">1,1%</div></div></div>
+        <div class="row"><div class="lab">Студенты</div><div class="track"><div class="fill f-blue" style="width:27.5%">18,4%</div></div></div></div>
+      <figcaption>Схема автора по таблице 1 из [4]. Шкала: вся полоса — 67%; самая короткая полоса растянута под подпись. Рисунок создан автором сайта.</figcaption>
+    </figure>
+
+    <h3>Что из этого следует</h3>
+    <p>Выраженное клиповое мышление чаще встречается у школьников, а целостное — у студентов: 1,1% против 18,4%. Умеренное встречается почти одинаково, примерно у каждого третьего в обеих группах. Авторы считают, что различие связано с возрастом и с тем, что поколения растут в разной среде: от книг к экранам <a class="cite" href="#sources">[4]</a>.</p>
+    <p>Но здесь тоже нет проверки причины. Школьники и студенты отличаются не только временем у экрана: разный возраст, разный опыт учёбы. Работа не измеряла, сколько видео смотрели участники, поэтому связать результат именно с короткими видео нельзя. Сами авторы называют объяснения предположениями <a class="cite" href="#sources">[4]</a>.</p>
+    <p><b>Итог раздела.</b> «Клиповое мышление» можно попробовать измерить, и у школьников его в этом исследовании больше. Но это название способа мыслить, а не болезнь, и причину работа не устанавливает.</p>
+
+    <div class="pager"><a href="#reading">Назад: Чтение</a><a class="next" href="#meta">Дальше: Мета-анализ</a></div>
+  </div>
+</section>
+
+<!-- ============ МЕТА-АНАЛИЗ ============ -->
+<section class="page" id="p-meta" hidden>
+  <div class="band b-mint"><div class="wrap">
+    <p class="part">Раздел 3 из 4</p>
+    <h2>71 исследование и почти 100 тысяч участников</h2>
+    <p class="sub">Что известно по всему миру и с чем именно связывают короткие видео.</p>
+  </div></div>
+  <div class="wrap body">
+    <div class="term"><b>Мета-анализ</b> — исследование исследований: учёные собирают много однотипных работ и считают общий результат. Он надёжнее одной небольшой работы, если исходные работы сделаны хорошо.</div>
+    <p>В 2025 году журнал Psychological Bulletin опубликовал обзор «Feeds, feelings, and focus» («Ленты, чувства и фокус»). В него вошли 71 исследование и 98 299 участников, подростки и взрослые, разные платформы <a class="cite" href="#sources">[3]</a>. Пересказ работы есть и на сайте PsyPost <a class="cite" href="#sources">[6]</a>.</p>
+    <div class="term"><b>Коэффициент корреляции r</b> — число от −1 до 1, которое показывает, насколько тесно связаны две величины. Минус значит: чем больше одного, тем меньше другого. Это не проценты.</div>
+
+    <figure>
+      <h4>Сила связи между просмотром коротких видео и показателем (модуль r; во всех случаях связь отрицательная)</h4>
+      <div class="row"><div class="lab">Тормозной контроль</div><div class="track"><div class="fill f-pink" style="width:82%">r = −0,41</div></div></div>
+      <div class="row"><div class="lab">Внимание</div><div class="track"><div class="fill f-pink" style="width:76%">r = −0,38</div></div></div>
+      <div class="row"><div class="lab">Познавательные способности в целом</div><div class="track"><div class="fill f-pink" style="width:68%">r = −0,34</div></div></div>
+      <div class="row"><div class="lab">Стресс</div><div class="track"><div class="fill f-yellow" style="width:68%">r = −0,34</div></div></div>
+      <div class="row"><div class="lab">Тревога</div><div class="track"><div class="fill f-yellow" style="width:66%">r = −0,33</div></div></div>
+      <div class="row"><div class="lab">Психическое здоровье в целом</div><div class="track"><div class="fill f-yellow" style="width:42%">r = −0,21</div></div></div>
+      <figcaption>Схема автора по аннотации [3]. Розовые полосы — познавательные показатели, жёлтые — самочувствие. Шкала: вся полоса — 0,5. Рисунок создан автором сайта.</figcaption>
+    </figure>
+
+    <p><b>Тормозной контроль</b> — способность сдержать порыв и не отвлечься на то, что сейчас не нужно. Именно с ним связь оказалась самой заметной, затем идёт внимание. Авторы оценивают связь с познавательными способностями как умеренную, а с психическим здоровьем как слабую. У подростков и взрослых результат был похожим. А вот связи с образом тела и самооценкой не нашли <a class="cite" href="#sources">[3]</a>.</p>
+
+    <h3>Почему это ещё не «видео портят мозг»</h3>
+    <p>Корреляция не доказывает причину. Допустим, у человека изначально слабее внимание или больше тревоги, и ему проще и приятнее листать ленту. Тогда связь есть, а видео ни при чём, либо они лишь усиливают проблему. Большинство работ в обзоре «одномоментные»: людей проверяли один раз, а не наблюдали годами. Многие измеряли время просмотра по опросу, а не по приложению, и мало кто отделял короткие видео от соцсетей в целом <a class="cite" href="#sources">[6]</a>. Сами авторы просят провести долгие наблюдения, чтобы понять, помогает ли сокращение просмотров <a class="cite" href="#sources">[6]</a>.</p>
+    <p><b>Итог раздела.</b> Это самое надёжное из найденного: связь повторяется в десятках работ. Но причину и направление связи она не показывает.</p>
+
+    <div class="pager"><a href="#clip">Назад: Клиповое мышление</a><a class="next" href="#myth">Дальше: Миф про 8 секунд</a></div>
+  </div>
+</section>
+
+<!-- ============ МИФ ============ -->
+<section class="page" id="p-myth" hidden>
+  <div class="band b-blue"><div class="wrap">
+    <p class="part">Раздел 4 из 4</p>
+    <h2>«Внимание человека 8 секунд»: откуда взялась цифра</h2>
+    <p class="sub">Чему в интернете верить нельзя и как это проверить.</p>
+  </div></div>
+  <div class="wrap body">
+    <p>В статьях про короткие видео почти всегда есть эта цифра. Например, в материале Men Today говорится, что современный человек способен сосредоточиться на одном объекте всего 8 секунд, со ссылкой на «недавнее исследование» без названия, авторов и описания <a class="cite" href="#sources">[2]</a>. Проверим, откуда она.</p>
+
+    <figure>
+      <h4>Путь цифры «8 секунд»</h4>
+      <div class="chain">
+        <div class="step"><b>2015 год</b>Отчёт компании Microsoft приводит цифру</div>
+        <div class="step"><b>Источник отчёта</b>Сайт Statistic Brain, который ссылается на NCBI и других</div>
+        <div class="step"><b>Проверка</b>Названные организации не нашли подтверждающих исследований</div>
+        <div class="step end"><b>Итог</b>Научных работ, которые так измеряют внимание, нет</div>
+      </div>
+      <figcaption>Схема автора по материалам BBC и WSJ [5]. Рисунок создан автором сайта.</figcaption>
+    </figure>
+
+    <p>Историю цифры разобрали журналист BBC Саймон Мэйбин и газета Wall Street Journal (материал Джо Крейвен Макгинти, 17.02.2017). В этих текстах психолог Эдвард Фогель из Чикагского университета говорит, что рецензируемых работ, которые бы измеряли внимание таким образом, нет. Сравнение с золотой рыбкой тоже не работает: исследователь поведения рыб Фелисити Хантингфорд указывает, что золотые рыбки учатся и запоминают, и на них изучают память <a class="cite" href="#sources">[5]</a>.</p>
+    <p>Есть и ещё одна проблема. Внимание зависит от задачи: можно часами играть в любимую игру и за минуту потерять нить скучного текста. Поэтому «средней продолжительности внимания» как одного числа не существует <a class="cite" href="#sources">[5]</a>.</p>
+
+    <h3>Как проверять такие «факты»</h3>
+    <p>Посмотрите, названо ли исследование, кто его провёл и на скольких людях. Если написано «недавние исследования показали», а ссылки нет, относитесь к цифре как к слуху. Так я проверял и материалы для этого сайта: где нашёл источник, там его указал, где не нашёл, не использовал утверждение.</p>
+    <p><b>Итог раздела.</b> Самая известная цифра про «клиповость» не имеет научного источника. Это не значит, что проблемы нет. Это значит, что доказательства надо искать в другом месте.</p>
+
+    <div class="pager"><a href="#meta">Назад: Мета-анализ</a><a class="next" href="#verdict">Дальше: Вывод</a></div>
+  </div>
+</section>
+
+<!-- ============ ВЫВОД ============ -->
+<section class="page" id="p-verdict" hidden>
+  <div class="band b-pink"><div class="wrap">
+    <p class="part">Вывод автора</p>
+    <h2>Что известно точно, что спорно и что делать учителю</h2>
+  </div></div>
+  <div class="wrap body">
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Утверждение</th><th>Что говорят источники</th><th>Надёжность</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Чем больше коротких видео, тем хуже внимание и самоконтроль</td><td>Связь найдена в мета-анализе 71 исследования [3]</td><td><span class="badge y">Связь надёжна, причина не доказана</span></td></tr>
+          <tr><td class="k">Школьники стали читать поверхностнее</td><td>Опрос 102 школьников: быстрее в 2 раза, ошибок больше в 1,5–1,7 раза [1]</td><td><span class="badge m">Сигнал, но выборка мала</span></td></tr>
+          <tr><td class="k">У школьников клиповое мышление выражено чаще, чем у студентов</td><td>61,8% против 44,7% на 89 и 76 участниках [4]</td><td><span class="badge m">Одно исследование, причина не установлена</span></td></tr>
+          <tr><td class="k">Короткие видео вредят самооценке и образу тела</td><td>Общей связи в мета-анализе не нашли [3]</td><td><span class="badge n">Не подтверждено в целом</span></td></tr>
+          <tr><td class="k">Внимание человека длится 8 секунд</td><td>Цифра не имеет научного источника [5]</td><td><span class="badge n">Миф</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Мой вывод</h3>
+    <p>Мне кажется, главная ошибка в разговорах о коротких видео — спорить «вредно или нет». Из найденного следует более скромный вывод: люди, которые много смотрят короткие видео, в среднем хуже справляются с задачами на внимание и самоконтроль, но мы не знаем, что здесь причина, а что следствие. Для учителя это значит, что нельзя запрещать видео «потому что они портят мышление», но можно честно проверить свой класс: не стало ли ученикам труднее читать длинный текст, и учить с этим работать.</p>
+    <p>Что можно делать на уроке, не дожидаясь точных ответов: давать тексты, где нужно найти главное и второстепенное; просить собрать рассказ из перемешанных частей, как в задании с карточками; учить проверять факты по источникам, как в разделе про 8 секунд.</p>
+    <p>Отдельно про мою идею: вместо одного длинного фильма на уроке показывать несколько коротких роликов. Это пока гипотеза. В найденных источниках нет проверки того, лучше ли ученики усваивают материал из коротких роликов, поэтому её нужно проверять на практике, а не считать доказанной.</p>
+    <p class="note">Ограничения этой работы: я не проводил собственное исследование и использовал шесть источников, два из которых научные, а остальные — пересказы и публицистика. Выводы нужно перепроверять по первоисточникам.</p>
+
+    <div class="pager"><a href="#myth">Назад: Миф про 8 секунд</a><a class="next" href="#sources">Дальше: Источники</a></div>
+  </div>
+</section>
+
+<!-- ============ ИСТОЧНИКИ ============ -->
+<section class="page" id="p-sources" hidden>
+  <div class="band b-yellow"><div class="wrap">
+    <p class="part">Список литературы</p>
+    <h2>Источники</h2>
+    <p class="sub">Все ссылки открывались 12.10.2026. Научные работы отмечены.</p>
+  </div></div>
+  <div class="wrap body">
+    <ol class="src">
+      <li>Лапина А. Исследователи назвали причину развития клипового мышления у школьников // Skillbox Media. 07.12.2021. <a href="https://skillbox.ru/media/education/issledovateli-nazvali-prichinu-razvitiya-klipovogo-myshleniya-u-shkolnikov/" target="_blank" rel="noopener">skillbox.ru/media/education/issledovateli-nazvali-prichinu-razvitiya-klipovogo-myshleniya-u-shkolnikov/</a>. Дата обращения: 12.10.2026. Пересказ исследования Приволжского исследовательского медицинского университета; оригинал не изучался.</li>
+      <li>Шаманова В. Можно ли отупеть от просмотра коротких видео // Men Today. 09.09.2023 (обновлено 10.02.2026). <a href="https://www.mentoday.ru/life/note/klipovoe-myshlenie-kak-prosmotr-korotkih-video-vliyaet-na-soznanie-cheloveka/" target="_blank" rel="noopener">mentoday.ru/life/note/klipovoe-myshlenie-kak-prosmotr-korotkih-video-vliyaet-na-soznanie-cheloveka/</a>. Дата обращения: 12.10.2026. Популярная статья, использована как пример непроверенной цифры.</li>
+      <li>Nguyen L., Walters J., Paul S. и др. Feeds, feelings, and focus: A systematic review and meta-analysis examining the cognitive and mental health correlates of short-form video use // Psychological Bulletin. 2025. Т. 151, № 9. С. 1125–1146. DOI: <a href="https://doi.org/10.1037/bul0000498" target="_blank" rel="noopener">10.1037/bul0000498</a>. Дата обращения: 12.10.2026. <span class="tag">научная статья</span> Результаты взяты из аннотации.</li>
+      <li>Поляков С. Д., Белозёрова Л. А., Вершинина В. В., Данилов С. В., Кривцова Н. С. «Клиповое мышление» у старшеклассников и студентов: опыт исследования // Вестник Московского университета. Серия 14. Психология. 2019. № 4. С. 126–143. <a href="https://msupsyj.ru/upload/iblock/475/t0izd3tlq8gxqmcoij4soyd0b9wzb7yz/vestnik_2019_4_126_143.pdf" target="_blank" rel="noopener">msupsyj.ru (PDF)</a>. Дата обращения: 12.10.2026. <span class="tag">научная статья</span></li>
+      <li>Maybin S. Busting the attention span myth // BBC News. 10.03.2017. <a href="https://www.bbc.com/news/health-38896790" target="_blank" rel="noopener">bbc.com/news/health-38896790</a>. Дата обращения: 12.10.2026. Сведения о Microsoft, Statistic Brain, Фогеле и Хантингфорд взяты из подборки BBC и WSJ (статья Jo Craven McGinty, 17.02.2017) в учебном курсе университета Висконсина; какая из реплик в каком из двух текстов, я не проверял.</li>
+      <li>Dolan E. W. Large meta-analysis links TikTok and Instagram Reels to poorer cognitive and mental health // PsyPost. 18.12.2025. <a href="https://www.psypost.org/large-meta-analysis-links-tiktok-and-instagram-reels-to-poorer-cognitive-and-mental-health/" target="_blank" rel="noopener">psypost.org/large-meta-analysis-links-tiktok-and-instagram-reels-to-poorer-cognitive-and-mental-health/</a>. Дата обращения: 12.10.2026. Научно-популярный пересказ статьи [3].</li>
+    </ol>
+    <div class="pager"><a href="#verdict">Назад: Вывод</a><a class="next" href="#author">Дальше: Об авторе</a></div>
+  </div>
+</section>
+
+<!-- ============ ОБ АВТОРЕ ============ -->
+<section class="page" id="p-author" hidden>
+  <div class="band b-mint"><div class="wrap">
+    <p class="part">Об авторе</p>
+    <h2>Иван Бойченко</h2>
+  </div></div>
+  <div class="wrap body">
+    <div class="authorbox">
+      <svg class="mark" role="img" aria-label="Авторский знак: монограмма ИБ"><use href="#mark"/></svg>
+      <dl>
+        <div><dt>Курс</dt><dd>Группа ПоГео1, 1 курс.</dd></div>
+        <div><dt>Почему я выбрал эту тему</dt><dd>Я думаю, что за счёт коротких роликов можно продвигать образование. На уроках вместо длинных фильмов можно показывать несколько коротких, и тогда дети не заснут, слушая один длинный ролик. К тому же короткие ролики сейчас популярны.</dd></div>
+        <div><dt>Авторский знак</dt><dd>Монограмма «ИБ» нарисована автором сайта как векторный рисунок. Контактов на сайте нет.</dd></div>
+      </dl>
+    </div>
+    <p class="note" style="margin-top:36px">Учебная работа по курсу «Технологии цифрового образования». Тема выбрана из заданий курса.</p>
+    <div class="pager"><a href="#sources">Назад: Источники</a><a class="next" href="#home">На главную</a></div>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap">Клип против смысла, учебный сайт. Все схемы и рисунки созданы автором, внешних изображений нет.</div></footer>
+
+<script>
+(function(){
+  var pages=['home','reading','clip','meta','myth','verdict','sources','author'];
+  var names={home:'Главная',reading:'Чтение',clip:'Мышление',meta:'Мета-анализ',myth:'8 секунд',verdict:'Вывод',sources:'Источники',author:'Автор'};
+  var lis=document.querySelectorAll('#stories li');
+  function show(){
+    var h=(location.hash||'#home').slice(1);
+    var i=pages.indexOf(h); if(i<0){i=0;h='home';}
+    pages.forEach(function(p){document.getElementById('p-'+p).hidden=(p!==h);});
+    lis.forEach(function(li,k){
+      li.classList.toggle('done',k<i);
+      li.classList.remove('run');
+      li.classList.toggle('cur',k===i);
+      if(k===i){void li.offsetWidth;li.classList.add('run');}
+      var a=li.querySelector('a'); if(k===i)a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
+    });
+    document.getElementById('cur').textContent=names[h]+', '+(i+1)+' из '+pages.length;
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',show);
+  show();
+})();
+
+(function(){
+  var reel=document.getElementById('reel'); if(!reel)return;
+  var slides=reel.querySelectorAll('.slide'), fills=reel.querySelectorAll('.bars b');
+  var N=slides.length, DUR=5000, idx=0, elapsed=0, last=0, manual=false, held=false, visible=true, raf=0;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) manual=true;
+  function paused(){return manual||held||!visible||document.hidden;}
+  function render(){
+    slides.forEach(function(sl,k){sl.classList.toggle('on',k===idx);});
+    reel.setAttribute('data-tone',slides[idx].getAttribute('data-tone'));
+    fills.forEach(function(f,k){f.style.transform='scaleX('+(k<idx?1:k===idx?Math.min(elapsed/DUR,1):0)+')';});
+    reel.classList.toggle('paused',manual||held);
+  }
+  function go(n){idx=(n+N)%N;elapsed=0;render();}
+  function tick(t){
+    if(!last)last=t; var dt=t-last; last=t;
+    if(!paused()){elapsed+=dt; if(elapsed>=DUR)go(idx+1); else render();}
+    raf=requestAnimationFrame(tick);
+  }
+  var holdTimer=null,wasHold=false;
+  reel.querySelectorAll('.zones button').forEach(function(btn){
+    btn.addEventListener('pointerdown',function(){
+      wasHold=false; clearTimeout(holdTimer);
+      holdTimer=setTimeout(function(){held=true;wasHold=true;render();},220);
+    });
+    function end(){clearTimeout(holdTimer); if(held){held=false;render();}}
+    btn.addEventListener('pointerup',end);
+    btn.addEventListener('pointerleave',end);
+    btn.addEventListener('pointercancel',end);
+    btn.addEventListener('click',function(){
+      if(wasHold){wasHold=false;return;}
+      var z=btn.getAttribute('data-z');
+      if(z==='prev')go(idx-1); else if(z==='next')go(idx+1); else {manual=!manual;render();}
+    });
+  });
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(e){visible=e[0].isIntersecting;},{threshold:.3}).observe(reel);
+  }
+  render(); raf=requestAnimationFrame(tick);
+})();
+</script>
+
+</body></html>
